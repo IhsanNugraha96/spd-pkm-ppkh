@@ -1,6 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\AuthController;
+// use App\Http\Controllers\ParticipantsController;
+// use App\Http\Controllers\FamilyController;
+// use App\Http\Controllers\IndikatorController;
+// use App\Http\Controllers\LocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +31,14 @@ Route::get('/logout', 'App\Http\Controllers\AuthController@logout')->name('auth.
 
 //Routing dashboard
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard')->middleware('auth');
+
+#USER
+Route::prefix('user')->group(function() {
+    Route::get('/', [UsersController::class, 'index'])->name('user.index')->middleware('auth');
+    Route::get('/get', [UsersController::class, 'get'])->name('user.get')->middleware('auth');    
+    Route::post('/add', [UsersController::class, 'add'])->name('user.add')->middleware('auth');
+    Route::put('/edit', [UsersController::class, 'edit'])->name('user.edit')->middleware('auth');
+    Route::delete('/delete', [UsersController::class, 'destroy'])->name('user.delete')->middleware('auth');
+    Route::get('/getById', [UsersController::class, 'getUserById'])->name('user.getById')->middleware('auth');
+    // Route::get('/users-login', [UserController::class, 'usersLogin'])->name('user.login');
+});

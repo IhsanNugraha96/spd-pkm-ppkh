@@ -17,8 +17,7 @@
                     $user = Auth::user();
                     if($user['role_id'] == 1) {
                       // user yang login memiliki role admin
-                      // echo '<li><a href="' . route('user.index') . '"><i class="fa fa-users '.(request()->is('user') ? 'active' : '').'"></i> User Accounts</a></li>';
-                      echo '<li><a href=""><i class="fa fa-users '.(request()->is('user') ? 'active' : '').'"></i> User Accounts</a></li>';
+                      echo '<li><a href="' . route('user.index') . '"><i class="fa fa-users '.(request()->is('user') ? 'active' : '').'"></i> User Accounts</a></li>';
                     }
                   @endphp
                   
