@@ -7,8 +7,7 @@
 
                   <li><a><i class="fa fa-tasks"></i> Datas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      {{-- <li><a href="{{ Route('participants') }}">Participants</a></li> --}}
-                      <li><a href="">Participants</a></li>
+                      <li><a href="{{ Route('participants') }}">Participants</a></li>
                       <li><a href="projects.html">Projects</a></li>
                     </ul>
                   </li>

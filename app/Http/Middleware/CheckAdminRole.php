@@ -19,7 +19,7 @@ class CheckAdminRole
     {
         // Cek apakah user sudah login
         if (!Auth::check()) {
-            return redirect()->route('login');
+            return redirect()->route('auth.login');
         }
 
         // Cek apakah user mempunyai role admin dengan role_id = 1

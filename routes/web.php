@@ -3,10 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AuthController;
-// use App\Http\Controllers\ParticipantsController;
-// use App\Http\Controllers\FamilyController;
-// use App\Http\Controllers\IndikatorController;
+use App\Http\Controllers\ParticipantsController;
+use App\Http\Controllers\FamilyController;
+use App\Http\Controllers\IndikatorController;
 // use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PictureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,3 +43,33 @@ Route::prefix('user')->group(function() {
     Route::get('/getById', [UsersController::class, 'getUserById'])->name('user.getById')->middleware('auth');
     // Route::get('/users-login', [UserController::class, 'usersLogin'])->name('user.login');
 });
+
+#DATAS
+// Participants
+Route::prefix('participants')->group(function() {
+    Route::get('/', [ParticipantsController::class, 'index'])->name('participants')->middleware('auth');
+    Route::get('/form-add', [ParticipantsController::class, 'viewFormAdd'])->name('participant.form-add')->middleware('auth');
+    Route::get('/getById', [ParticipantsController::class, 'getParticipantById'])->name('participant.getById')->middleware('auth');
+    Route::get('/view-detail', [ParticipantsController::class, 'viewDetail'])->name('participant.view-detail')->middleware('auth');
+});
+
+// Location
+Route::get('kota', [LocationController::class, 'getListKotaByProv'])->name('list-kota.prov')->middleware('auth');
+Route::get('kecamatan', [LocationController::class, 'getListKecamatanByKota'])->name('list-kec.kota')->middleware('auth');
+Route::get('kelurahan', [LocationController::class, 'getListKelurahanByKec'])->name('list-kel.kec')->middleware('auth');
+
+// Family
+Route::prefix('family')->group(function() {
+    Route::post('/add', [FamilyController::class, 'index'])->name('family.add')->middleware('auth');
+    Route::put('/update', [FamilyController::class, 'update'])->name('family.update')->middleware('auth');
+    Route::delete('/delete', [FamilyController::class, 'destroy'])->name('family.delete')->middleware('auth');
+});
+
+// Picture
+Route::prefix('picture')->group(function() {
+    Route::get('/download-profil/{filename}', [PictureController::class, 'downloadProfil'])->name('download.profil')->middleware('auth');;
+    Route::get('/download-home/{filename}', [PictureController::class, 'downloadHome'])->name('download.home')->middleware('auth');
+});
+
+// Indikator
+Route::put('indikator/update', [IndikatorController::class, 'update'])->name('indikator.update')->middleware('auth');
