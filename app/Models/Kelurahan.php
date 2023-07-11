@@ -16,7 +16,7 @@ class Kelurahan extends Model
      * @var array
      */
     protected $fillable = [
-        'id_kelurahan',
+        'id',
         'id_kecamatan',
         'nama_kelurahan', 
         'created_at', 

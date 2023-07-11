@@ -80,7 +80,7 @@
     </div>
   </div>
   <!-- /page content -->
-  {{-- @include('participant.edit') --}}
+  @include('participant.edit')
   {{-- @include('participant.delete') --}}
 @endsection
 {{-- page scripts --}}

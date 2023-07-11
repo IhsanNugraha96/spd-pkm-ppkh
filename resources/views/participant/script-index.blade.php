@@ -225,22 +225,23 @@ console.log(response);
                 $('#kota').val(response[0]['id_kota']);        
                 $('#kec').val(response[0]['id_kecamatan']);        
                 $('#kel').val(response[0]['id_kelurahan']); 
-
+                
                 var id_kota = response[0]['id_kota'];
+                
                 $.ajax({
                     url: '{{ route("list-kota.prov") }}',
                     type: 'GET',
                     dataType: 'json',
                     data: {
-                        'id': $('#provinsi').val(),
+                        'id': response[0]['id_provinsi'],
                     },
                     error: function (data, textStatus, errorThrown) {
                         console.log(data);
                     },
                     success: function (data) {
                         $.each(data, function (index) {
-                            var option = $('<option>').addClass('kotaOption').val(data[index].id_kota).text(convertToCamelCase(data[index].nama_kota));
-                            if (data[index].id_kota == id_kota) {
+                            var option = $('<option>').addClass('kotaOption').val(data[index].id).text(convertToCamelCase(data[index].nama_kota));
+                            if (data[index].id == id_kota) {
                                 option.prop('selected', true);
                             }
                             $('#kota').append(option);
@@ -261,8 +262,8 @@ console.log(response);
                     },
                     success: function (data) {
                         $.each(data, function (index) {
-                            var option = $('<option>').addClass('kecOption').val(data[index].id_kecamatan).text(convertToCamelCase(data[index].nama_kecamatan));
-                            if (data[index].id_kecamatan == id_kecamatan) {
+                            var option = $('<option>').addClass('kecOption').val(data[index].id).text(convertToCamelCase(data[index].nama_kecamatan));
+                            if (data[index].id == id_kecamatan) {
                                 option.prop('selected', true);
                             }
                             $('#kec').append(option);
@@ -282,16 +283,17 @@ console.log(response);
                         console.log(data);
                     },
                     success: function (data) {
+                        console.log(data);
                         $.each(data, function (index) {
-                            var option = $('<option>').addClass('kelOption').val(data[index].id_kelurahan).text(convertToCamelCase(data[index].nama_kelurahan));
-                            if (data[index].id_kelurahan == id_kelurahan) {
+                            var option = $('<option>').addClass('kelOption').val(data[index].id).text(convertToCamelCase(data[index].nama_kelurahan));
+                            if (data[index].id == id_kelurahan) {
                                 option.prop('selected', true);
                             }
                             $('#kel').append(option);
                         });
+                        
                     }
                 });
-
             },
             error: function(xhr) {
                 

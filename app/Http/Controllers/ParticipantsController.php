@@ -36,7 +36,7 @@ class ParticipantsController extends Controller
         $list_kab = Kota::all();
         $list_kec = Kecamatan::all();
         $list_kel = Kelurahan::all();
-// dd($data);
+        
         if ($request->ajax()) {
             return Datatables::of($data)
             ->addIndexColumn()
@@ -58,7 +58,6 @@ class ParticipantsController extends Controller
     {
         $user = Auth::user();
         $data = json_decode(Participants::getParticipantById($request->query('id')), true);
-        // dd($data);
         $roles = Role::all();
         $data = $data[0];
         $data_keluarga = json_decode(Participants::getDatakeluargaByIdKk($data['id_kk']), true);
@@ -151,5 +150,98 @@ class ParticipantsController extends Controller
         $peserta->save();
         
         return redirect()->route('participants')->with(['success' => 'Data Peserta berhasil ditambahkan']);
+    }
+
+    public function edit(Request $request)
+    {   
+        if ($request->nik != $request->nik_lama) {
+            $validator = Validator::make($request->all(), [
+                'nik'      => 'required|unique:ktp,id',
+            ]);
+    
+            if ($validator->fails()) {
+                //redirect dengan pesan error
+                return redirect()->route('participants')->with(['error' => 'NIK sudah ada!']);
+            }
+        }
+              
+        $data_peserta = Participants::find($request->data_id);
+        if (!$data_peserta) {
+            return redirect()->route('participants')->with(['error' => 'Data Peserta tidak ditemukan.']);
+
+        } else {
+            $this->updateDataKtp($data_peserta['id_ktp'], $request);
+            $this->updateDataKk($data_peserta['id_kk'],$request);
+            $this->updateDataPeserta($request);
+        }
+
+        if($data_peserta){
+            //redirect dengan pesan sukses
+            return redirect()->route('participants')->with(['success' => 'Data Keluarga Berhasil Di perbaharui!']);
+        }else{
+            //redirect dengan pesan error
+            return redirect()->route('participants')->with(['error' => 'Data Keluarga Gagal Di perbaharui!']);
+        }
+    }
+
+    public function updateDataPeserta($request)
+    {
+        $user = Auth::user();
+        $data_peserta = Participants::find($request->data_id);
+        $data_peserta->update([  
+            'id'                => $data_peserta['id'],
+            'tahun_kepesertaan' => $request->thn_peserta,
+            'nama_ibu'          => $request->ibu,
+            'updated_by'        => $user->id
+        ]);   
+    }
+
+    public function updateDataKtp($id, $request)
+    {
+        $data_ktp = Ktp::find($id);
+        $user = Auth::user();
+        $data_ktp->update([  
+            'nik'           => $request->nik,
+            'nama'          => $request->name,
+            'tempat_lahir'  => $request->tmp_lahir,
+            'tgal_lahir'    => $request->tgl_lahir,
+            'alamat'        => $request->alamat,
+            'rt'            => $request->rt,
+            'rw'            => $request->rw,
+            'id_kelurahan'  => $request->kel,
+            'id_agama'      => $request->agama,
+            'status_perkawinan' => $request->kawin,
+            'pekerjaan'     => $request->pekerjaan,
+            'kewarganegaraan' => $request->negara,
+            'updated_by'    => $user->id
+        ]);
+        DB::table('ktp')
+        ->where('id', $id) // Filter berdasarkan ID data KTP
+        ->update(['nik' => $request->nik]);
+    }
+
+    public function updateDataKk($id, $request)
+    {
+        $data_kk = Kk::find($id);
+        DB::table('kk')
+        ->where('id', $id) // Filter berdasarkan ID data KTP
+        ->update([  
+            'no_kk'      => $request->kk,
+            'kepala_keluarga'  => $request->kpl_kk
+        ]);
+    }
+
+    public function getParticipantById(Request $request) 
+    {
+        if (request()->ajax()) {
+            $data = json_decode(Participants::getParticipantById($request->query('id')), true);
+            
+            if ($data == null) {
+                abort(404);
+            }
+            return response()->json($data, 200);
+        }else {
+            abort(404);
+        }
     }
 }
