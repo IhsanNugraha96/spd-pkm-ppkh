@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ParticipantsController;
 use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\IndikatorController;
-// use App\Http\Controllers\LocationController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PictureController;
 
 /*
@@ -51,6 +51,10 @@ Route::prefix('participants')->group(function() {
     Route::get('/form-add', [ParticipantsController::class, 'viewFormAdd'])->name('participant.form-add')->middleware('auth');
     Route::get('/getById', [ParticipantsController::class, 'getParticipantById'])->name('participant.getById')->middleware('auth');
     Route::get('/view-detail', [ParticipantsController::class, 'viewDetail'])->name('participant.view-detail')->middleware('auth');
+    Route::post('/add',[ParticipantsController::class, 'insert'])->name('participant.add')->middleware('auth');
+    Route::put('/update', [ParticipantsController::class, 'edit'])->name('participant.edit')->middleware('auth');
+    Route::delete('/delete', [ParticipantsController::class, 'delete'])->name('participant.delete')->middleware('auth');
+    Route::get('/getById', [ParticipantsController::class, 'getParticipantById'])->name('participant.getById')->middleware('auth');
 });
 
 // Location

@@ -66,4 +66,90 @@ class ParticipantsController extends Controller
         return view('participant.detail.index', compact('roles','data', 'user', 'data_keluarga'));
     }
 
+    public function viewFormAdd()
+    {
+        $user = Auth::user();
+        $data = Participants::getAll();
+        $roles = Role::all();
+        $list_agama = Agama::all();
+        $list_status_kawin = StatusPerkawinan::all();
+        $list_provinsi = Provinsi::all();
+        
+        return view('participant.insert', compact('roles','data', 'user', 'list_agama', 'list_status_kawin', 'list_provinsi'));
+    }
+
+    public function insert(Request $request)
+    {
+        $user = Auth::user();   
+        
+        $id_ktp = (new RandomCodeController)->generateRandomString(50, 'KTP');
+        $id_kk = (new RandomCodeController)->generateRandomString(50, 'KK');
+        $id_idikator = (new RandomCodeController)->generateRandomString(50, 'IDK');
+
+        $validator = Validator::make($request->all(), [
+            'nik'      => 'required|unique:ktp,id',
+        ]);
+
+        if ($validator->fails()) {
+            //redirect dengan pesan error
+            return redirect()->route('participants')->with(['error' => 'NIK sudah ada!']);
+        }
+        
+        // instance model ktp
+        $ktp = new Ktp();
+        $ktp->id = $id_ktp;
+        $ktp->nik = $request->input('nik');
+        $ktp->nama = $request->input('name');
+        $ktp->tempat_lahir = $request->input('tmp_lahir');
+        $ktp->tgal_lahir = $request->input('tgl_lahir');
+        $ktp->alamat = $request->input('alamat');
+        $ktp->rt = $request->input('rt');
+        $ktp->rw = $request->input('rw');
+        $ktp->id_kelurahan = $request->input('kel');
+        $ktp->id_agama = $request->input('agama');
+        $ktp->status_perkawinan = $request->input('kawin');
+        $ktp->pekerjaan = $request->input('pekerjaan');
+        $ktp->kewarganegaraan = $request->input('negara');
+        $ktp->created_by = $user->id;
+
+        // instance model kk
+        $kk = new Kk();
+        $kk->id = $id_kk;
+        $kk->no_kk = $request->input('kk');
+        $kk->kepala_keluarga = $request->input('kpl_kk');
+
+        //instance model idikator
+        $indikator = new Indikator();
+        $indikator->id = $id_idikator;
+        $indikator->keluarga_sebelum    = 'keluarga_sebelum';
+        $indikator->keluarga_setelah    = 'keluarga_setelah';
+        $indikator->ekonomi_sebelum     = 'ekonomi_sebelum';
+        $indikator->ekonomi_setelah     = 'ekonomi_setelah';
+        $indikator->kesehatan_sebelum   = 'kesehatan_sebelum';
+        $indikator->kesehatan_setelah   = 'kesehatan_setelah';
+        $indikator->pendidikan_sebelum  = 'pendidikan_sebelum';
+        $indikator->pendidikan_setelah  = 'pendidikan_setelah';
+        $indikator->rumah_sebelum       = 'rumah_sebelum';
+        $indikator->rumah_setelah       = 'rumah_setelah';
+
+        // instance model peserta
+        $peserta = new Participants();
+        $peserta->id_ktp = $id_ktp;
+        $peserta->id_kk = $id_kk;
+        $peserta->id_profil = 1;
+        $peserta->id_home = 1;
+        $peserta->id_indikator = $id_idikator;
+        $peserta->tahun_kepesertaan = $request->input('thn_peserta');
+        $peserta->nama_ibu = $request->input('ibu');
+        $peserta->created_by = $user->id;
+        $peserta->updated_by = $user->id;
+        
+        // Simpan data ke database
+        $ktp->save();
+        $kk->save();
+        $indikator->save();
+        $peserta->save();
+        
+        return redirect()->route('participants')->with(['success' => 'Data Peserta berhasil ditambahkan']);
+    }
 }

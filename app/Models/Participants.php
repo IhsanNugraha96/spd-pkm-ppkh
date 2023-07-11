@@ -18,7 +18,6 @@ class Participants extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 
         'id_ktp',
         'id_kk',
         'id_profil', 
@@ -26,7 +25,8 @@ class Participants extends Model
         'id_indikator',
         'tahun_kepesertaan',
         'nama_ibu',
-        'created_by'
+        'created_by',
+        'updated_by'
     ];
 
     /**
