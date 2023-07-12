@@ -9,7 +9,6 @@ class Home extends Model
 {
     use HasFactory;
     protected $table = 'home_images';
-    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

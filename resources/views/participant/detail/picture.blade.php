@@ -9,14 +9,29 @@
           </button>
         </div>
         <div class="modal-body text-center">
-            <img src="{{ asset('/images/peserta/'.$data['profil_image']) }}" alt="profil-image" title="" class="w-100">
+            @if ($data['profil_image'] == 'no_image.jpg')
+              <img src="{{ asset('/images/peserta/'.$data['profil_image']) }}" alt="profil-image" title="" class="w-100">                    
+            @else
+              <img src="{{ asset('/storage/images/peserta/'.$data['profil_image']) }}" alt="profil-image" title="" class="w-100"> 
+            @endif
+           
+            <form action="{{ route('profil-upload') }}" method="POST" enctype="multipart/form-data">
+              @csrf
+              <div class="form-group mt-3">
+                <input type="text" hidden name="id" value="{{ $data['id_profil'] }}">
+                <input type="text" hidden name="id_participant" value="{{ $data['id'] }}">
+
+                <input type="file" class="form-control-file" id="image" name="image" required>
+              </div>
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           @if ($data['profil_image'] != 'no_image.jpg')
-            <a href="{{ route('download.profil', ['filename' => $data['profil_image']]) }}" class="btn btn-primary">Unduh</a>
+            <a href="{{ route('download.profil', ['filename' => $data['profil_image']]) }}" class="btn btn-success">Unduh</a>
           @endif
-          
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
         </div>
       </div>
     </div>
@@ -32,14 +47,29 @@
         </button>
       </div>
       <div class="modal-body text-center">
-          <img src="{{ asset('/images/rumah/'.$data['home_image']) }}" alt="home-image" title="" class="w-100">
+        @if ($data['home_image'] == 'no_image.jpg')
+          <img src="{{ asset('/images/rumah/'.$data['home_image']) }}" alt="home-image" title="" class="w-100">                   
+        @else
+          <img src="{{ asset('/storage/images/rumah/'.$data['home_image']) }}" alt="home-image" title="" class="w-100"> 
+        @endif
+
+        <form action="{{ route('home-upload') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <div class="form-group mt-3">
+            <input type="text" hidden name="id" value="{{ $data['id_home'] }}">
+            <input type="text" hidden name="id_participant" value="{{ $data['id'] }}">
+
+            <input type="file" class="form-control-file" id="image" name="image" required>
+          </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         @if ($data['home_image'] != 'no_image.jpg')
           <a href="{{ route('download.home', ['filename' => $data['home_image']]) }}" class="btn btn-primary">Unduh</a>
         @endif
-        
+        <button type="submit" class="btn btn-primary">Save</button>
+        </form>
       </div>
       </form>
     </div>

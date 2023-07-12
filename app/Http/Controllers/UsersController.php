@@ -25,7 +25,7 @@ class UsersController extends Controller
     
     public function index(Request $request){
         $user = Auth::user();
-        $data = User::get();
+        $data = User::get()->where('role_id', '!=', '1');
         $roles = Role::all();
         
         if ($request->ajax()) {

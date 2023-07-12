@@ -73,6 +73,8 @@ Route::prefix('family')->group(function() {
 Route::prefix('picture')->group(function() {
     Route::get('/download-profil/{filename}', [PictureController::class, 'downloadProfil'])->name('download.profil')->middleware('auth');;
     Route::get('/download-home/{filename}', [PictureController::class, 'downloadHome'])->name('download.home')->middleware('auth');
+    Route::post('/profil-upload',[PictureController::class, 'uploadProfil'])->name('profil-upload');
+    Route::post('/home-upload',[PictureController::class, 'uploadHome'])->name('home-upload')->middleware('auth');
 });
 
 // Indikator

@@ -83,13 +83,22 @@
 
             <div class="col-md-2 col-sm-4">
               <button type='button' data-toggle='modal' data-target='#showProfilModal' class='btn'>
-                <img src="{{ asset('/images/peserta/'.$data['profil_image']) }}" alt="profil-image" title="" class="w-100">
+                @if ($data['profil_image'] == 'no_image.jpg')
+                  <img src="{{ asset('/images/peserta/'.$data['profil_image']) }}" alt="profil-image" title="" class="w-100">                    
+                @else
+                  <img src="{{ asset('/storage/images/peserta/'.$data['profil_image']) }}" alt="profil-image" title="" class="w-100"> 
+                @endif
+                
               </button>
             </div>
 
             <div class="col-md-4 col-sm-8">
               <button type='button' data-toggle='modal' data-target='#showHomeModal' class='btn'>
-                <img src="{{ asset('/images/rumah/'.$data['home_image']) }}" alt="home-image" title="" class="w-100">              
+              @if ($data['home_image'] == 'no_image.jpg')
+                <img src="{{ asset('/images/rumah/'.$data['home_image']) }}" alt="home-image" title="" class="w-100">                   
+              @else
+                <img src="{{ asset('/storage/images/rumah/'.$data['home_image']) }}" alt="home-image" title="" class="w-100"> 
+              @endif             
               </button>
               </div>
           </div>

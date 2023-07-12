@@ -108,8 +108,8 @@
                     searchable: true
                 },
                 {
-                    data: 'updated_date',
-                    name: 'updated_date',
+                    data: 'updated_at',
+                    name: 'updated_at',
                     orderable: true,
                     searchable: true,
                     className: "text-center"
