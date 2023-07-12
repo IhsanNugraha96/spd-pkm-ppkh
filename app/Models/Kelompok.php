@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Indikator extends Model
+class Kelompok extends Model
 {
     use HasFactory;
     protected $table = 'kelompok';
@@ -32,4 +32,17 @@ class Indikator extends Model
     protected $hidden = [
         
     ];
+
+    public function getAll()
+    {
+        return DB::table('kelompok')
+        ->select(
+            'kelompok.id',
+            'kelompok.nama_kelompok',
+            'kelompok.id_akun_user',
+            'users.name',
+        )
+        ->leftJoin('users', 'kelompok.id_akun_user', '=', 'users.id')
+        ->get();
+    }
 }

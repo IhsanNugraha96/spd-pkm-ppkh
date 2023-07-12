@@ -8,6 +8,7 @@ use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\IndikatorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PictureController;
+use App\Http\Controllers\KelompokController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +72,7 @@ Route::prefix('family')->group(function() {
 
 // Picture
 Route::prefix('picture')->group(function() {
-    Route::get('/download-profil/{filename}', [PictureController::class, 'downloadProfil'])->name('download.profil')->middleware('auth');;
+    Route::get('/download-profil/{filename}', [PictureController::class, 'downloadProfil'])->name('download.profil')->middleware('auth');
     Route::get('/download-home/{filename}', [PictureController::class, 'downloadHome'])->name('download.home')->middleware('auth');
     Route::post('/profil-upload',[PictureController::class, 'uploadProfil'])->name('profil-upload');
     Route::post('/home-upload',[PictureController::class, 'uploadHome'])->name('home-upload')->middleware('auth');
@@ -79,3 +80,11 @@ Route::prefix('picture')->group(function() {
 
 // Indikator
 Route::put('indikator/update', [IndikatorController::class, 'update'])->name('indikator.update')->middleware('auth');
+
+// Kelompok
+Route::prefix('kelompok')->group(function() {
+    Route::get('/}', [KelompokController::class, 'index'])->name('kelompok')->middleware('auth');
+    Route::post('/insert', [KelompokController::class, 'insert'])->name('kelompok.add')->middleware('auth');
+    Route::put('/update',[KelompokController::class, 'update'])->name('kelompok.edit');
+    Route::delete('/delete',[KelompokController::class, 'delete'])->name('kelompok.delete')->middleware('auth');
+});
