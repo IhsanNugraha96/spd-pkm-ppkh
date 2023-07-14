@@ -77,8 +77,8 @@
   </div>
   <!-- /page content -->
   @include('kelompok.insert')
-  {{-- @include('kelompok.edit') --}}
-  {{-- @include('kelompok.delete') --}}
+  @include('kelompok.edit')
+  @include('kelompok.delete')
 @endsection
 {{-- page scripts --}}
 @push('scripts')

@@ -42,6 +42,7 @@ Route::prefix('user')->group(function() {
     Route::put('/edit', [UsersController::class, 'edit'])->name('user.edit')->middleware('auth');
     Route::delete('/delete', [UsersController::class, 'destroy'])->name('user.delete')->middleware('auth');
     Route::get('/getById', [UsersController::class, 'getUserById'])->name('user.getById')->middleware('auth');
+    Route::get('/getKetuaKelompok', [UsersController::class, 'getKetuaKelompok'])->name('user.getKetuaKelompok')->middleware('auth');
     // Route::get('/users-login', [UserController::class, 'usersLogin'])->name('user.login');
 });
 
@@ -83,8 +84,9 @@ Route::put('indikator/update', [IndikatorController::class, 'update'])->name('in
 
 // Kelompok
 Route::prefix('kelompok')->group(function() {
-    Route::get('/}', [KelompokController::class, 'index'])->name('kelompok')->middleware('auth');
+    Route::get('/', [KelompokController::class, 'index'])->name('kelompok')->middleware('auth');
     Route::post('/insert', [KelompokController::class, 'insert'])->name('kelompok.add')->middleware('auth');
     Route::put('/update',[KelompokController::class, 'update'])->name('kelompok.edit');
     Route::delete('/delete',[KelompokController::class, 'delete'])->name('kelompok.delete')->middleware('auth');
+    Route::get('/id', [KelompokController::class, 'getById'])->name('kelompok.getById')->middleware('auth');
 });

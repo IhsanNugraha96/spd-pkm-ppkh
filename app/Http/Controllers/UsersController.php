@@ -132,4 +132,17 @@ class UsersController extends Controller
             abort(404);
         }
     }
+
+    public function getKetuaKelompok(Request $request)
+    {
+        if (request()->ajax()) {
+            $data = User::getAkunKetuaKelompok();
+            if ($data == null) {
+                abort(404);
+            }
+            return response()->json($data, 200);
+        }else {
+            abort(404);
+        }
+    }
 }

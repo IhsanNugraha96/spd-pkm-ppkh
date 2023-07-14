@@ -144,7 +144,7 @@
         });
     }
 
-    $('#editUserModal').on('show.bs.modal', function (event) {
+    $('#editGroupModal').on('show.bs.modal', function (event) {
         var button  = $(event.relatedTarget) // Button that triggered the modal
         var data_id = button.data('id') // Extract info from data-* attributes
         var modal   = $(this)
@@ -153,26 +153,26 @@
         
         $.ajax({
             type: 'GET',
-            url: '{{ route('user.getById') }}',
+            url: '{{ route('kelompok.getById') }}',
             dataType: 'json',
             data: {
                 id: data_id
             },
             success: function(response) {
-                $('#name').val(response[0]['name']);
-                $('#email').val(response[0]['email']);
+                console.log(response);
+                $('#name').val(response[0]['nama_kelompok']);
+                $("#akun_edit").val(response[0]['id_akun_user'])
             },
             error: function(xhr) {
                 $('#name').val('insert new name');
-                $('#email').val('isert new email');
             }
         });         
     });        
 
-    // $('#deleteUserModal').on('show.bs.modal', function (event) {
-    //     var button  = $(event.relatedTarget) // Button that triggered the modal
-    //     var data_id = button.data('id') // Extract info from data-* attributes
-    //     $('#id').val(data_id);
-    // });
+    $('#deleteGroupModal').on('show.bs.modal', function (event) {
+        var button  = $(event.relatedTarget) // Button that triggered the modal
+        var data_id = button.data('id') // Extract info from data-* attributes
+        $('#id').val(data_id);
+    });
 
 </script>
