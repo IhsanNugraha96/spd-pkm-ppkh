@@ -47,12 +47,12 @@
                     <div class="col-sm-12">
                       <div class="card-box table-responsive">
               <p class="text-muted font-13 m-b-30">
-                The Buttons extension for DataTables provides a common set of options, API methods and styling to display buttons on a page that will interact with a DataTable. The core library provides the based framework upon which plug-ins can built.
+                Berikut merupakan data kelompok dengan disertai nama ketua kelompok dan pembimbingnya. Untuk menambah kelompok baru, mengubah atau menghapus data kelompok, bisa menggunakan tombol yang sudah disediakan.
               </p>
 
               <div class="container-fluid">    
-                <div class="text-right">      
-                  <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addGroupModal"><i class="fa fa-user-plus"></i> | Add New Group</button>
+                <div class="text-right"> 
+                  <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addGroupModal" {{ ($user->role_id == 1) ? "hidden" : '' }}><i class="fa fa-user-plus"></i> | Add New Group</button>
                 </div>
                 <table class="table table-striped table-bordered" id="datatable" style="width:100%">
                   <thead>
@@ -60,6 +60,7 @@
                       <th>No</th>
                       <th>Nama Kelompok</th>
                       <th>Ketua Kelompok</th>
+                      <th>Pembimbing</th>
                       <th>Action</th>
                     </tr>
                   </thead>                      

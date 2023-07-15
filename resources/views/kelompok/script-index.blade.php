@@ -102,6 +102,12 @@
                     searchable: true
                 },
                 {
+                    data: 'pembimbing',
+                    name: 'pembimbing',
+                    orderable: true,
+                    searchable: true
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,

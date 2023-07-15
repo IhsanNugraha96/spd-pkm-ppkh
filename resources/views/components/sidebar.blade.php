@@ -8,7 +8,14 @@
                   <li><a><i class="fa fa-tasks"></i> Datas <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{ Route('participants') }}">Participants</a></li>
-                      <li><a href="{{ Route('kelompok') }}">Kelompok</a></li>
+                      @php
+                      $user = Auth::user();
+                      if($user['role_id'] != 3) {
+                        // user yang login memiliki role admin
+                        echo '<li><a href="' . route('kelompok'). '">Kelompok</a></li>';
+                      }
+                    @endphp
+                      {{-- <li><a href="{{ Route('kelompok') }}">Kelompok</a></li> --}}
                     </ul>
                   </li>
 

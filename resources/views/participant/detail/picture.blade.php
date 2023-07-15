@@ -21,7 +21,7 @@
                 <input type="text" hidden name="id" value="{{ $data['id_profil'] }}">
                 <input type="text" hidden name="id_participant" value="{{ $data['id'] }}">
 
-                <input type="file" class="form-control-file" id="image" name="image" required>
+                <input type="file" class="form-control-file" id="image" name="image" required {{ $user->role_id == 1 ? "hidden" : '' }}>
               </div>
           
         </div>
@@ -30,7 +30,7 @@
           @if ($data['profil_image'] != 'no_image.jpg')
             <a href="{{ route('download.profil', ['filename' => $data['profil_image']]) }}" class="btn btn-success">Unduh</a>
           @endif
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-primary" {{ $user->role_id == 1 ? "hidden" : '' }}>Save</button>
         </form>
         </div>
       </div>
@@ -59,7 +59,7 @@
             <input type="text" hidden name="id" value="{{ $data['id_home'] }}">
             <input type="text" hidden name="id_participant" value="{{ $data['id'] }}">
 
-            <input type="file" class="form-control-file" id="image" name="image" required>
+            <input type="file" class="form-control-file" id="image" name="image" required {{ $user->role_id == 1 ? "hidden" : '' }}>
           </div>
 
       </div>
@@ -68,7 +68,7 @@
         @if ($data['home_image'] != 'no_image.jpg')
           <a href="{{ route('download.home', ['filename' => $data['home_image']]) }}" class="btn btn-primary">Unduh</a>
         @endif
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" {{ $user->role_id == 1 ? "hidden" : '' }}>Save</button>
         </form>
       </div>
       </form>

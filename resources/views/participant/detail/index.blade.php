@@ -107,7 +107,7 @@
 
           {{-- tabel KK /Anggota Keluarga--}}
           <div class="row mt-4 p-2">
-            <button type='button' data-toggle='modal' data-target='#addKeluargaModal{{ $data['id_kk'] }}' class='btn btn-sm text-primary' data-id='{$id_penerima_pkh}'><i class='fa fa-plus-circle'> Keluarga</i></button>
+            <button type='button' data-toggle='modal' data-target='#addKeluargaModal{{ $data['id_kk'] }}' class='btn btn-sm text-primary' data-id='{$id_penerima_pkh}' {{ $user->role_id == 1 ? "disabled" : '' }}><i class='fa fa-plus-circle'> Keluarga</i></button>
 
             <table class="table table-striped w-100">
               <thead>
@@ -143,8 +143,8 @@
                     <td class="text-center">{{ $item['kelas'] }}</td>
                     <td>{{ $item['nama_fasilitas'] }}</td>
                     <td class="text-center">
-                      <button type='button' data-toggle='modal' data-target='#editKeluargaModal{{ $item["id"] }}' class='btn btn-sm text-warning' data-id='{$id_penerima_pkh}'><i class='fa fa-pencil-square-o'></i></button>
-                      <button type='button' data-toggle='modal' data-target='#deleteKeluargaModal{{ $item["id"] }}' class='btn btn-sm text-danger' data-id='{$id_penerima_pkh}'><i class='fa fa-trash'></i></button>
+                      <button type='button' data-toggle='modal' data-target='#editKeluargaModal{{ $item["id"] }}' class='btn btn-sm text-warning' data-id='{$id_penerima_pkh}' {{ $user->role_id == 1 ? "disabled" : '' }}><i class='fa fa-pencil-square-o'></i></button>
+                      <button type='button' data-toggle='modal' data-target='#deleteKeluargaModal{{ $item["id"] }}' class='btn btn-sm text-danger' data-id='{$id_penerima_pkh}' {{ $user->role_id == 1 ? "disabled" : '' }}><i class='fa fa-trash'></i></button>
                     </td>
                   </tr>
                   @php
@@ -158,7 +158,7 @@
           <hr class="text-primary">
           {{-- tabel KK /Anggota Keluarga--}}
           <div  class="mb-2">            
-            <button type='button' data-toggle='modal' data-target='#editIndikatorModal' class='btn btn-sm text-warning'><i class='fa fa-pencil-square-o'> Indikator</i></button>
+            <button type='button' data-toggle='modal' data-target='#editIndikatorModal' class='btn btn-sm text-warning' {{ $user->role_id == 1 ? "disabled" : '' }}><i class='fa fa-pencil-square-o'> Indikator</i></button>
 
             <table class="table table-striped w-100">
               <thead>

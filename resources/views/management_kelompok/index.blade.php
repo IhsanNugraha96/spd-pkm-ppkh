@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Data Peserta')
+@section('title','Kelompok Manajemen')
 
 @push('css')
 <!-- Styles custom untuk halaman users -->
@@ -26,7 +26,7 @@
     <div class="">
       <div class="page-title">
         <div class="title_left">
-          <h3>Data Peserta</h3>
+          <h3>Kelompok Manajemen</h3>
         </div>
       </div>
 
@@ -37,7 +37,7 @@
         <div class="col-md-12 col-sm-12 ">
           <div class="x_panel">
             <div class="x_title">
-              <h2>Data Peserta</h2>
+              <h2>Data Kelompok</h2>
               <ul class="nav navbar-right panel_toolbox">
               </ul>
               <div class="clearfix"></div>
@@ -52,19 +52,15 @@
 
               <div class="container-fluid">    
                 <div class="text-right">      
-                  <a href="{{ route("participant.form-add") }}" class="btn btn-sm btn-primary mb-2" {{ $user->role_id == 1 ? "hidden" : '' }}><i class="fa fa-user-plus"></i> | Add New User</a>
-                  {{-- <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-user-plus"></i> | Add New User</button> --}}
+                  <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addGroupModal"><i class="fa fa-user-plus"></i> | Add New Group</button>
                 </div>
-                <table class="table table-striped table-bordered display nowrap" id="datatable" style="width:100%">
+                <table class="table table-striped table-bordered" id="datatable" style="width:100%">
                   <thead>
-                    <tr class="text-center">
+                    <tr>
                       <th>No</th>
-                      <th>NIK</th>
-                      <th>Nama</th>
-                      <th>Alamat</th>
-                      <th>Last Update</th>
-                      <th>Updated By</th>
-                      <th>Aksi</th>
+                      <th>Nama Kelompok</th>
+                      <th>Ketua Kelompok</th>
+                      <th>Action</th>
                     </tr>
                   </thead>                      
                 </table>
@@ -80,11 +76,11 @@
     </div>
   </div>
   <!-- /page content -->
-  @include('participant.edit')
-  {{-- @include('participant.delete') --}}
+  @include('kelompok.insert')
+  @include('kelompok.edit')
+  @include('kelompok.delete')
 @endsection
 {{-- page scripts --}}
 @push('scripts')
-    @include('participant.script-index')
+    @include('kelompok.script-index')
 @endpush
-{{--  --}}

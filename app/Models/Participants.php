@@ -144,4 +144,15 @@ class Participants extends Model
         ->where('id_kk', $id_kk)
         ->get();
     }
+
+    public function getPenerimaPkhByIdPembimbing($id)
+    {
+        return DB::table('penerima_pkh')
+        ->join('anggota_kelompok', 'penerima_pkh.id', '=', 'anggota_kelompok.id_penerima_pkh')
+        ->join('kelompok', 'anggota_kelompok.id_kelompok', '=', 'kelompok.id')
+        ->join('ktp', 'penerima_pkh.id_ktp', 'ktp.id')
+        ->join('users', 'penerima_pkh.updated_by', '=', 'users.id')
+        ->where('kelompok.id_akun_pembimbing', $id)
+        ->get();
+    }
 }

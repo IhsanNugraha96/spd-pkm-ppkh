@@ -14,6 +14,8 @@ use App\Models\Kelurahan;
 use App\Models\Ktp;
 use App\Models\Kk;
 use App\Models\Indikator;
+use App\Models\Kelompok;
+use App\Models\AnggotaKelompok;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +30,15 @@ class ParticipantsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $data = Participants::getAll();
+        if ($user->role_id == 1) {    
+            $data = Participants::getAll();
+        } elseif ($user->role_id == 2) {
+            $data = Participants::getPenerimaPkhByIdPembimbing($user->id);
+        } else {
+            $kelompok = Kelompok::getByIdKetua($user->id);
+            $data = AnggotaKelompok::getParticipantByIdKelompok($kelompok->id);
+        }
+// dd($data);
         $roles = Role::all();
         $list_agama = Agama::all();
         $list_status_kawin = StatusPerkawinan::all();
@@ -36,21 +46,31 @@ class ParticipantsController extends Controller
         $list_kab = Kota::all();
         $list_kec = Kecamatan::all();
         $list_kel = Kelurahan::all();
-        
         if ($request->ajax()) {
             return Datatables::of($data)
-            ->addIndexColumn()
-            ->addColumn('action', function($data){  
-                $id = $data->id;   
-                        
-                return "
-                <button type='button' class='btn btn-sm text-info' data-id='{$id}' onclick='viewDetail({$id})'><i class='fa fa-eye' aria-hidden='true'></i></button>
-                <button type='button' data-toggle='modal' data-target='#editParticipantModal' class='btn btn-sm text-warning' data-id='{$id}'><i class='fa fa-pencil-square-o'></i></button>
-                <button type='button' data-toggle='modal' data-target='#deleteParticipantModal' class='btn btn-sm text-danger' data-id='{$id}'><i class='fa fa-trash'></i></button>";
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+                ->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $id = $data->id;
+                    $user = Auth::user();
+                    $editButton = "<button type='button' class='btn btn-sm text-warning' data-id='{$id}' data-toggle='modal' data-target='#editParticipantModal' ";
+                    $viewButton = "<button type='button' class='btn btn-sm text-info' data-id='{$id}' onclick='viewDetail({$id})' ";
+                    $deleteButton = "<button type='button' class='btn btn-sm text-danger' data-id='{$id}' data-toggle='modal' data-target='#deleteParticipantModal' ";
+        
+                    if ($user->role_id == 1) {
+                        $editButton .= "disabled";
+                        $deleteButton .= "disabled";
+                    }
+        
+                    $editButton .= "><i class='fa fa-pencil-square-o'></i></button>";
+                    $viewButton .= "><i class='fa fa-eye' aria-hidden='true'></i></button>";
+                    $deleteButton .= "><i class='fa fa-trash'></i></button>";
+        
+                    return $viewButton . $editButton . $deleteButton;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
+        
         return view('participant.index', compact('roles','data', 'user', 'list_agama', 'list_status_kawin', 'list_provinsi', 'list_kab', 'list_kec', 'list_kel'));
     }
 

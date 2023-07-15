@@ -17,22 +17,36 @@ class KelompokController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $data = Kelompok::getAll();
-        $data_akun = User::getAkunKetuaKelompok();
-        // dd($data_akun);
+        if ($user->role_id == 3) {return back()->with(['error' => 'Anda tidak mempunyai akses!']);}
+
+        ($user->role_id == 1) ? $data = Kelompok::getAll() : $data = Kelompok::getByIdPembimbig($user->id);
+        ($user->role_id == 1) ? $data_akun = User::getAkunKetuaKelompok() : $data_akun = User::getAkunKetuaKelompokByIdPendamping($user->id);
+        
+
         if ($request->ajax()) {
             return Datatables::of($data)
-            ->addIndexColumn()
-            ->addColumn('action', function($data){  
-                $id = $data->id;   
-                        
-                return "
-                <button type='button' data-toggle='modal' data-target='#editGroupModal' class='btn btn-sm text-warning' data-id='{$id}'><i class='fa fa-pencil-square-o'></i></button>
-                <button type='button' data-toggle='modal' data-target='#deleteGroupModal' class='btn btn-sm text-danger' data-id='{$id}'><i class='fa fa-trash'></i></button>";
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+                ->addIndexColumn()
+                ->addColumn('action', function ($data) {
+                    $user = Auth::user();
+                    $id = $data->id;
+        
+                    $editButton = "<button type='button' data-toggle='modal' data-target='#editGroupModal' class='btn btn-sm text-warning' data-id='{$id}' ";
+                    $deleteButton = "<button type='button' data-toggle='modal' data-target='#deleteGroupModal' class='btn btn-sm text-danger' data-id='{$id}' ";
+        
+                    if ($user->role_id == 1) {
+                        $editButton .= "disabled";
+                        $deleteButton .= "disabled";
+                    }
+        
+                    $editButton .= "><i class='fa fa-pencil-square-o'></i></button>";
+                    $deleteButton .= "><i class='fa fa-trash'></i></button>";
+        
+                    return $editButton . $deleteButton;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
+        
         return view('kelompok.index', compact('data', 'user', 'data_akun'));
     }
 
@@ -48,12 +62,13 @@ class KelompokController extends Controller
             return redirect()->route('kelompok')->with(['error' => 'Harap mengisi data dengan benar!']);
         }
 
-        
+        $user = Auth::user();
         $id_kelompok = (new RandomCodeController)->generateRandomString(50, 'KLP-');
         $data = Kelompok::create([
             'id'            => $id_kelompok,
             'nama_kelompok' => $request->name,
             'id_akun_user'  => $request->akun,
+            'id_akun_pembimbing'=> $user->id,
         ]);
 
         if($data){

@@ -63,4 +63,14 @@ class User extends Authenticatable
     {
         return DB::table('users')->where('role_id', 3)->get();
     }
+
+    public function getAkunKetuaKelompokByIdPendamping($id)
+    {
+        return DB::table('kelompok')
+        ->select('kelompok.*', 'users.*')
+        ->join('users', 'kelompok.id_akun_user', 'users.id')
+        ->where('kelompok.id_akun_pembimbing', $id)
+        ->where('users.role_id', 3)
+        ->get();
+    }
 }
