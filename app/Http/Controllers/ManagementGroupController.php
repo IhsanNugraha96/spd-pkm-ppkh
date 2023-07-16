@@ -18,6 +18,7 @@ class ManagementGroupController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $user = User::findById($user->id);
         $data = Kelompok::getAll();
         $data_akun = User::getAkunKetuaKelompok();
         // dd($data_akun);

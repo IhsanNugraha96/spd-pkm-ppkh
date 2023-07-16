@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title','Data Peserta')
+@section('title','Data Peserta') 
 
 @push('css')
 <!-- Styles custom untuk halaman users -->
@@ -86,5 +86,7 @@
 {{-- page scripts --}}
 @push('scripts')
     @include('participant.script-index')
+    
+    <script src="{{ url('build/js/custom.min.js') }}"></script>
 @endpush
 {{--  --}}

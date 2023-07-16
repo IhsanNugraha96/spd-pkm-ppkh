@@ -28,6 +28,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             $user = Auth::user();
+            $user = User::findById($user->id);
             $username = $user->name;
             return redirect()->route('dashboard')->with('success', 'Welcome back '.$username.'!');
         } 

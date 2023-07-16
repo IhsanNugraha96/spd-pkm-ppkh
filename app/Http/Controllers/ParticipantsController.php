@@ -16,6 +16,7 @@ use App\Models\Kk;
 use App\Models\Indikator;
 use App\Models\Kelompok;
 use App\Models\AnggotaKelompok;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,7 @@ class ParticipantsController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $user = User::findById($user->id);
         if ($user->role_id == 1) {    
             $data = Participants::getAll();
         } elseif ($user->role_id == 2) {
@@ -77,6 +79,7 @@ class ParticipantsController extends Controller
     public function viewDetail(Request $request)
     {
         $user = Auth::user();
+        $user = User::findById($user->id);
         $data = json_decode(Participants::getParticipantById($request->query('id')), true);
         $roles = Role::all();
         $data = $data[0];
@@ -88,6 +91,7 @@ class ParticipantsController extends Controller
     public function viewFormAdd()
     {
         $user = Auth::user();
+        $user = User::findById($user->id);
         $data = Participants::getAll();
         $roles = Role::all();
         $list_agama = Agama::all();
@@ -99,7 +103,8 @@ class ParticipantsController extends Controller
 
     public function insert(Request $request)
     {
-        $user = Auth::user();   
+        $user = Auth::user();  
+        $user = User::findById($user->id); 
         
         $id_ktp = (new RandomCodeController)->generateRandomString(50, 'KTP');
         $id_kk = (new RandomCodeController)->generateRandomString(50, 'KK');
@@ -207,6 +212,7 @@ class ParticipantsController extends Controller
     public function updateDataPeserta($request)
     {
         $user = Auth::user();
+        $user = User::findById($user->id);
         $data_peserta = Participants::find($request->data_id);
         $data_peserta->update([  
             'id'                => $data_peserta['id'],
@@ -220,6 +226,7 @@ class ParticipantsController extends Controller
     {
         $data_ktp = Ktp::find($id);
         $user = Auth::user();
+        $user = User::findById($user->id);
         $data_ktp->update([  
             'nik'           => $request->nik,
             'nama'          => $request->name,

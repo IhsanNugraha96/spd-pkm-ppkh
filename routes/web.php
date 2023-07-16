@@ -43,7 +43,9 @@ Route::prefix('user')->group(function() {
     Route::delete('/delete', [UsersController::class, 'destroy'])->name('user.delete')->middleware('auth');
     Route::get('/getById', [UsersController::class, 'getUserById'])->name('user.getById')->middleware('auth');
     Route::get('/getKetuaKelompok', [UsersController::class, 'getKetuaKelompok'])->name('user.getKetuaKelompok')->middleware('auth');
-    // Route::get('/users-login', [UserController::class, 'usersLogin'])->name('user.login');
+    Route::get('/profil', [UsersController::class, 'profil'])->name('profil');
+    Route::put('/profil-edit', [UsersController::class, 'profilEdit'])->name('profil.edit');
+    Route::put('/profil-password', [UsersController::class, 'profilEditPassword'])->name('profil.edit-password');
 });
 
 #DATAS

@@ -50,6 +50,7 @@ class PictureController extends Controller
     public function uploadProfil(Request  $request)
     {   
         $user = Auth::user();
+        $user = User::findById($user->id);
         $id_profil = (new RandomCodeController)->generateRandomString(50, 'FOTO-');
         
        $file = $request->file('image');
@@ -96,6 +97,7 @@ class PictureController extends Controller
     public function uploadHome(Request $request)
     {
         $user = Auth::user();
+        $user = User::findById($user->id);
         $id_home = (new RandomCodeController)->generateRandomString(50, 'HOME-');
         
        $file = $request->file('image');

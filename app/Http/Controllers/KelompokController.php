@@ -17,6 +17,7 @@ class KelompokController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        $user = User::findById($user->id);
         if ($user->role_id == 3) {return back()->with(['error' => 'Anda tidak mempunyai akses!']);}
 
         ($user->role_id == 1) ? $data = Kelompok::getAll() : $data = Kelompok::getByIdPembimbig($user->id);
@@ -63,6 +64,7 @@ class KelompokController extends Controller
         }
 
         $user = Auth::user();
+        $user = User::findById($user->id);
         $id_kelompok = (new RandomCodeController)->generateRandomString(50, 'KLP-');
         $data = Kelompok::create([
             'id'            => $id_kelompok,

@@ -1,3 +1,9 @@
+@php
+  use App\Models\User;
+  $user = Auth::user();
+  $user = User::findById($user->id);
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 @include('components.header')
@@ -16,7 +22,11 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="{{ asset('images/img.jpg') }}" alt="..." class="img-circle profile_img">
+                @if ($user->profil_image == 'users.png')
+                  <img src="{{ asset('/images/peserta/'.$user->profil_image) }}" alt="profil-image" title="" class="img-circle profile_img">
+                @else
+                  <img src="{{ asset('/storage/images/peserta/'.$user->profil_image) }}" alt="profil-image" title="" class="img-circle profile_img">
+                @endif
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>

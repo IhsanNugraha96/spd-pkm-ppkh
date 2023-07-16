@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\ProfilImages;
+use App\Http\Controllers\RadomCodeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -25,7 +27,8 @@ class UsersController extends Controller
     
     public function index(Request $request){
         $user = Auth::user();
-        $data = User::get()->where('role_id', '!=', '1');
+        $user = User::findById($user->id);
+        $data = User::get();
         $roles = Role::all();
         
         if ($request->ajax()) {
@@ -71,11 +74,12 @@ class UsersController extends Controller
             return redirect()->route('user.index')->with(['error' => 'Harap mengisi data dengan benar!']);
         }
 
+        $password = (new RandomCodeController)->generateRandomString(8, '');
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
-            'password' => Hash::make('5776Ppkh'),
-            'image_id' => '1',
+            'password' => Hash::make($password),
+            'image_id' => '0',
             'role_id'  => $request->role,
         ]);
 
@@ -144,5 +148,100 @@ class UsersController extends Controller
         }else {
             abort(404);
         }
+    }
+
+    public function profil()
+    {
+        $user = Auth::user();
+        $user = User::findById($user->id);
+        $data = User::get();
+        $roles = Role::all();
+        
+        return view('user.profil.index', compact('user', 'roles'));
+    }
+
+    public function profilEdit(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required|Regex:/\A(?!.*[:;]-\))[ -~]+\z/',
+        ]);
+
+        if ($validator->fails()) {
+            //redirect dengan pesan error
+            return back()->with(['error' => 'Harap mengisi data dengan benar!']);
+        }
+
+        $dataUser   = User::find($request->id);
+        $checkEmail = User::where('email', $request->input('email'))->exists();
+
+        if ($checkEmail && $dataUser->email != $request->input('email')) {
+            return back()->with(['error' => 'email sudah digunakan!']);
+        }
+
+
+        if ($request->image != null) {
+            $id_profil = (new RandomCodeController)->generateRandomString(50, 'FOTO-');
+        
+            $file = $request->file('image');
+
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpeg,png,jpg|file|max:2028',
+            ]);
+
+            if ($validator->fails()) {
+                return back()->with(['error' => 'Harap unggah foto dengan ukuran dibawah 2MB!']);
+            }
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->storeAs('public/images/peserta', $request->id.'-'.$file->getClientOriginalName());
+            }
+            
+            if ($dataUser->image_id == '0') {
+                $profil = new ProfilImages();
+                $profil->id = $id_profil;
+                $profil->profil_image = $request->id.'-'.$file->getClientOriginalName();
+                $profil->created_by = $request->id;
+                $profil->updated_by = $request->id;
+
+                $dataUser->image_id = $id_profil;
+
+                $profil->save();
+
+            } else {
+                $profil = ProfilImages::find($dataUser->image_id);
+                unlink("storage/images/peserta/".$profil->profil_image);
+
+                $profil->profil_image = $request->id.'-'.$file->getClientOriginalName();
+                $profil->updated_by = $request->id;
+
+                $profil->save();
+            }
+        }       
+        
+        $dataUser->name = $request->name;
+        $dataUser->email = $request->email;
+        $dataUser->save();
+
+        return back()
+        ->with(['success' => 'Akun berhasil dipebaharui!']);
+    }
+
+    public function profilEditPassword(Request $request)
+    {
+        $dataUser   = User::find($request->id);
+
+        if (!Hash::check($request->pass1, $dataUser->password)) 
+        {
+            return back()->with(['error' => 'Password lama tidak sesuai!']);
+        } 
+
+        if ($request->pass2 != $request->pass3) {
+            return back()->with(['error' => 'Password baru tidak sama!']);
+        } else {
+            $dataUser->password = Hash::make($request->pass2);
+            $dataUser->save();
+        }
+        
+        return back()->with(['success' => 'Password berhasil dipebaharui!']);
     }
 }

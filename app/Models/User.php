@@ -51,7 +51,10 @@ class User extends Authenticatable
 
     public function findById($id)
     {
-        return DB::table('users')->where('id', $id)->first();
+        return DB::table('users')
+        ->leftJoin('profil_images', 'users.image_id', '=', 'profil_images.id')
+        ->where('users.id', $id)
+        ->first();
     }
 
     public function findByEmail($email)
