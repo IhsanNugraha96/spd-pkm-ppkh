@@ -14,7 +14,10 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>SPDPP-PPKH</span></a>
+              <a href="index.html" class="site_title">
+                <img src="{{ asset('/images/logo.jpg') }}" alt="" style="width: 21%; border-radius: 50%;"> 
+                <span>SPDPP-PPKH</span>
+              </a>
             </div>
 
             <div class="clearfix"></div>

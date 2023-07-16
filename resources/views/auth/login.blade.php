@@ -34,12 +34,13 @@
             <div class="container py-5 h-100">
               <div class="row d-flex align-items-center justify-content-center h-100">
                 <div class="col-md-8 col-lg-7 col-xl-6">
-                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-                    class="img-fluid" alt="Phone image">
+                  {{-- <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" class="img-fluid" alt="Phone image"> --}}
+                  <img src="{{ asset('/images/ilustrasi.png') }}" alt="" class="img-fluid w-100">
                 </div> 
 
                 <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1 ">
                     <h3 class="h3 mb-4 fw-normal text-center text-white">Login Form</h3>
+                    <img src="{{ asset('/images/logo1.png') }}" alt="" class="img-fluid mx-auto d-block" style="width: 20%;">
                     @include('alerts.alert') 
                     <form class="was-validated" action={{ route('authenticate') }} method="POST">
                         @csrf
@@ -63,12 +64,7 @@
                             @enderror
                         </div>          
                     <div class="d-flex justify-content-around align-items-center mb-4">
-                      <!-- Checkbox -->
-                      {{-- <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-                        <label class="form-check-label" for="form1Example3"> Remember me </label>
-                      </div> --}}
-                      <a href="#!">Forgot password?</a>
+                      {{-- <a href="#!">Forgot password?</a> --}}
                     </div>
           
                     <!-- Submit button -->
