@@ -70,6 +70,12 @@ return [
         'array' => [
             'transport' => 'array',
         ],
+
+        'stream' => [
+            'ssl' => [
+                'verify_peer' => false,
+            ],
+        ],
     ],
 
     /*

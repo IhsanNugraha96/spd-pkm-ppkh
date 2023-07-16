@@ -17,6 +17,8 @@ use Yajra\DataTables\DataTables;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use App\Http\Middleware\CheckAdminRole;
+use App\Mail\AccountCreatedMail;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
@@ -28,14 +30,16 @@ class UsersController extends Controller
     public function index(Request $request){
         $user = Auth::user();
         $user = User::findById($user->id);
-        $data = User::get();
+        $data = User::orderBy('role_id', 'ASC')->get();
         $roles = Role::all();
         
         if ($request->ajax()) {
             return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('roled', function($data){
-                return $data->role_id == 1 ? 'Admin' : "User";
+                if ($data->role_id == 1) { return 'Admin';} 
+                if ($data->role_id == 2) { return 'Pendamping';} 
+                if ($data->role_id == 3) { return 'Ketua Kelompok';} 
             })
             ->addColumn('action', function($data){  
                 $id = $data->id;   
@@ -85,6 +89,7 @@ class UsersController extends Controller
 
         if($user){
             //redirect dengan pesan sukses
+            Mail::to($request->email)->send(new AccountCreatedMail($request->email, $password));
             return redirect()->route('user.index')->with(['success' => 'User Berhasil Ditambahkan!']);
         }else{
             //redirect dengan pesan error
