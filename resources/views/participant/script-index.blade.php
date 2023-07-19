@@ -193,8 +193,7 @@
         $('#kpl_kk').val('');
         $('#thn_peserta').val('');
         $('#thn_peserta').val('');
-        
-console.log(button.data('id'));        
+              
         $.ajax({
             type: 'GET',
             url: '{{ route('participant.getById') }}',
@@ -203,7 +202,6 @@ console.log(button.data('id'));
                 id: button.data('id')
             },
             success: function(response) {
-console.log(response);
                 $('#nik_lama').val(response[0]['id_ktp']);
                 $('#nik').val(response[0]['nik']);
                 $('#name').val(response[0]['nama']);
@@ -236,7 +234,6 @@ console.log(response);
                         'id': response[0]['id_provinsi'],
                     },
                     error: function (data, textStatus, errorThrown) {
-                        console.log(data);
                     },
                     success: function (data) {
                         $.each(data, function (index) {
@@ -258,7 +255,6 @@ console.log(response);
                         'id': id_kota,
                     },
                     error: function (data, textStatus, errorThrown) {
-                        console.log(data);
                     },
                     success: function (data) {
                         $.each(data, function (index) {
@@ -280,10 +276,8 @@ console.log(response);
                         'id': id_kecamatan,
                     },
                     error: function (data, textStatus, errorThrown) {
-                        console.log(data);
                     },
                     success: function (data) {
-                        console.log(data);
                         $.each(data, function (index) {
                             var option = $('<option>').addClass('kelOption').val(data[index].id).text(convertToCamelCase(data[index].nama_kelurahan));
                             if (data[index].id == id_kelurahan) {
@@ -455,7 +449,6 @@ console.log(response);
                     console.log(data);
                 },
                 success: function (data) {
-console.log(data);
                     $("#placeKelurahan").removeAttr("hidden");
                     $.each(data, function (index) {
                         $('#kel').append('<option class="kelOption" value="' + data[index].id_kelurahan + '">' + convertToCamelCase(data[index].nama_kelurahan) + '</option>')

@@ -71,8 +71,8 @@ class PictureController extends Controller
             $profil = new ProfilImages();
             $profil->id = $id_profil;
             $profil->profil_image = $request->id_participant.'-'.$file->getClientOriginalName();
-            $profil->created_by = $user->id;
-            $profil->updated_by = $user->id;
+            $profil->created_by = Auth::user()->id;
+            $profil->updated_by = Auth::user()->id;
 
             $participant = Participants::find($request->id_participant);
             $participant->id_profil = $id_profil;
@@ -85,7 +85,7 @@ class PictureController extends Controller
             unlink("storage/images/peserta/".$profil->profil_image);
 
             $profil->profil_image = $request->id_participant.'-'.$file->getClientOriginalName();
-            $profil->updated_by = $user->id;
+            $profil->updated_by = Auth::user()->id;
 
             $profil->save();
         }
@@ -118,8 +118,8 @@ class PictureController extends Controller
             $rumah = new Home();
             $rumah->id = $id_home;
             $rumah->home_image = $request->id_participant.'-'.$file->getClientOriginalName();
-            $rumah->created_by = $user->id;
-            $rumah->updated_by = $user->id;
+            $rumah->created_by = Auth::user()->id;
+            $rumah->updated_by = Auth::user()->id;
 
             $participant = Participants::find($request->id_participant);
             $participant->id_home = $id_home;
@@ -132,7 +132,7 @@ class PictureController extends Controller
             unlink("storage/images/rumah/".$rumah->home_image);
 
             $rumah->home_image = $request->id_participant.'-'.$file->getClientOriginalName();
-            $rumah->updated_by = $user->id;
+            $rumah->updated_by = Auth::user()->id;
 
             $rumah->save();
         }

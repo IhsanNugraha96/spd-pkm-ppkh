@@ -34,13 +34,15 @@ class ParticipantsController extends Controller
         $user = User::findById($user->id);
         if ($user->role_id == 1) {    
             $data = Participants::getAll();
+            $kelompok = [];
         } elseif ($user->role_id == 2) {
-            $data = Participants::getPenerimaPkhByIdPembimbing($user->id);
+            $data = Participants::getPenerimaPkhByIdPembimbing2(Auth::user()->id);
+            $kelompok = Kelompok::getByIdPembimbig(Auth::user()->id);
         } else {
-            $kelompok = Kelompok::getByIdKetua($user->id);
-            $data = AnggotaKelompok::getParticipantByIdKelompok($kelompok->id);
+            $kelompok = Kelompok::getByIdKetua(Auth::user()->id);
+            ($kelompok == null) ? $data = [] : $data = AnggotaKelompok::getParticipantByIdKelompok($kelompok->id);
         }
-// dd($data);
+        
         $roles = Role::all();
         $list_agama = Agama::all();
         $list_status_kawin = StatusPerkawinan::all();
@@ -73,7 +75,7 @@ class ParticipantsController extends Controller
                 ->make(true);
         }
         
-        return view('participant.index', compact('roles','data', 'user', 'list_agama', 'list_status_kawin', 'list_provinsi', 'list_kab', 'list_kec', 'list_kel'));
+        return view('participant.index', compact('roles','data', 'user', 'list_agama', 'list_status_kawin', 'list_provinsi', 'list_kab', 'list_kec', 'list_kel', 'kelompok'));
     }
 
     public function viewDetail(Request $request)
@@ -92,23 +94,29 @@ class ParticipantsController extends Controller
     {
         $user = Auth::user();
         $user = User::findById($user->id);
+        if ($user->role_id == 2) {
+            $kelompok = Kelompok::getByIdPembimbig(Auth::user()->id);
+        } else {
+            $kelompok = Kelompok::getByIdKetua(Auth::user()->id);
+        }
+        
         $data = Participants::getAll();
         $roles = Role::all();
         $list_agama = Agama::all();
         $list_status_kawin = StatusPerkawinan::all();
         $list_provinsi = Provinsi::all();
         
-        return view('participant.insert', compact('roles','data', 'user', 'list_agama', 'list_status_kawin', 'list_provinsi'));
+        return view('participant.insert', compact('roles','data', 'user', 'list_agama', 'list_status_kawin', 'list_provinsi', 'kelompok'));
     }
 
     public function insert(Request $request)
     {
         $user = Auth::user();  
         $user = User::findById($user->id); 
-        
         $id_ktp = (new RandomCodeController)->generateRandomString(50, 'KTP');
         $id_kk = (new RandomCodeController)->generateRandomString(50, 'KK');
         $id_idikator = (new RandomCodeController)->generateRandomString(50, 'IDK');
+        $id_anggota_kel = (new RandomCodeController)->generateRandomString(50, 'AGK');
 
         $validator = Validator::make($request->all(), [
             'nik'      => 'required|unique:ktp,id',
@@ -134,7 +142,7 @@ class ParticipantsController extends Controller
         $ktp->status_perkawinan = $request->input('kawin');
         $ktp->pekerjaan = $request->input('pekerjaan');
         $ktp->kewarganegaraan = $request->input('negara');
-        $ktp->created_by = $user->id;
+        $ktp->created_by = Auth::user()->id;
 
         // instance model kk
         $kk = new Kk();
@@ -165,14 +173,23 @@ class ParticipantsController extends Controller
         $peserta->id_indikator = $id_idikator;
         $peserta->tahun_kepesertaan = $request->input('thn_peserta');
         $peserta->nama_ibu = $request->input('ibu');
-        $peserta->created_by = $user->id;
-        $peserta->updated_by = $user->id;
-        
+        $peserta->created_by = Auth::user()->id;
+        $peserta->updated_by = Auth::user()->id;
+
         // Simpan data ke database
         $ktp->save();
         $kk->save();
         $indikator->save();
         $peserta->save();
+
+        // instance model anggota_kelompok
+        $anggota_kel = new AnggotaKelompok();
+        $anggota_kel->id = $id_anggota_kel;
+        $anggota_kel->id_kelompok = $request->kelompok;
+        $anggota_kel->id_penerima_pkh = $peserta->id;
+        $anggota_kel->status = 1;
+
+        $anggota_kel->save();
         
         return redirect()->route('participants')->with(['success' => 'Data Peserta berhasil ditambahkan']);
     }
@@ -218,7 +235,7 @@ class ParticipantsController extends Controller
             'id'                => $data_peserta['id'],
             'tahun_kepesertaan' => $request->thn_peserta,
             'nama_ibu'          => $request->ibu,
-            'updated_by'        => $user->id
+            'updated_by'        => Auth::user()->id
         ]);   
     }
 
@@ -240,7 +257,7 @@ class ParticipantsController extends Controller
             'status_perkawinan' => $request->kawin,
             'pekerjaan'     => $request->pekerjaan,
             'kewarganegaraan' => $request->negara,
-            'updated_by'    => $user->id
+            'updated_by'    => Auth::user()->id
         ]);
         DB::table('ktp')
         ->where('id', $id) // Filter berdasarkan ID data KTP

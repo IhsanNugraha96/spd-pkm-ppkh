@@ -52,7 +52,7 @@
 
               <div class="container-fluid">    
                 <div class="text-right">      
-                  <a href="{{ route("participant.form-add") }}" class="btn btn-sm btn-primary mb-2" {{ $user->role_id == 1 ? "hidden" : '' }}><i class="fa fa-user-plus"></i> | Add New User</a>
+                  <a href="{{ route("participant.form-add") }}" class="btn btn-sm btn-primary mb-2" {{ $user->role_id == 1 ? "hidden" : '' }} {{ $kelompok == null ? "hidden" : '' }}><i class="fa fa-user-plus"></i> | Add New User</a>
                   {{-- <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-user-plus"></i> | Add New User</button> --}}
                 </div>
                 <table class="table table-striped table-bordered display nowrap" id="datatable" style="width:100%">

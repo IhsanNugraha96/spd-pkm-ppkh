@@ -24,7 +24,7 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware([CheckAdminRole::class]);
+        // $this->middleware([CheckAdminRole::class]);
     }
     
     public function index(Request $request){

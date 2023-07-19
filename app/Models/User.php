@@ -69,10 +69,20 @@ class User extends Authenticatable
 
     public function getAkunKetuaKelompokByIdPendamping($id)
     {
-        return DB::table('kelompok')
+        return DB::table('users')
         ->select('kelompok.*', 'users.*')
-        ->join('users', 'kelompok.id_akun_user', 'users.id')
-        ->where('kelompok.id_akun_pembimbing', $id)
+        ->leftJoin('kelompok', 'kelompok.id_akun_user', 'users.id')
+        // ->where('kelompok.id_akun_pembimbing', $id)
+        ->where('users.role_id', 3)
+        ->whereNull('kelompok.id_akun_user')
+        ->get();
+    }
+
+    public function getAkunKetuaKelompokByIdPendamping2($id)
+    {
+        return DB::table('users')
+        ->select('kelompok.*', 'users.*')
+        ->leftJoin('kelompok', 'kelompok.id_akun_user', 'users.id')
         ->where('users.role_id', 3)
         ->get();
     }

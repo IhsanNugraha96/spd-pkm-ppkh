@@ -25,7 +25,6 @@
                     console.log(data);
                 },
                 success: function (data) {
-console.log(data);
                     $("#placeKota").removeAttr("hidden");
                     $.each(data, function (index) {
                         $('#kota').append('<option class="kotaOption" value="' + data[index].id + '">' + convertToCamelCase(data[index].nama_kota) + '</option>')
@@ -63,7 +62,6 @@ console.log(data);
         });
 
         $("#kota").change(function () {
-            console.log($('#kota').val())
         $('#placeKecamatan').text("pilih kecamatan");
         $('#kec').val(null).trigger('change');
         $("#kec").attr("disabled", true);
@@ -143,7 +141,6 @@ console.log(data);
                     console.log(data);
                 },
                 success: function (data) {
-console.log(data);
                     $("#placeKelurahan").removeAttr("hidden");
                     $.each(data, function (index) {
                         $('#kel').append('<option class="kelOption" value="' + data[index].id + '">' + convertToCamelCase(data[index].nama_kelurahan) + '</option>')

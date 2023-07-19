@@ -21,7 +21,7 @@ class ManagementGroupController extends Controller
         $user = User::findById($user->id);
         $data = Kelompok::getAll();
         $data_akun = User::getAkunKetuaKelompok();
-        // dd($data_akun);
+        
         if ($request->ajax()) {
             return Datatables::of($data)
             ->addIndexColumn()

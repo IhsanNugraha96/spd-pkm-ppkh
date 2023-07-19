@@ -31,7 +31,7 @@
                   <div class="input-group">
                       <select class="akun_edit form-control" id="akun_edit" name="akun_edit" aria-describedby="inputGroupPrepend" required>
                           <option value="" disabled>--select ketua--</option>
-                          @foreach ($data_akun as $item)
+                          @foreach ($data_akun_edit as $item)
                             <option value="{{ $item->id }}" {{ $item->id == $id_ketua ? 'selected' : '' }}>{{ $item->name }}</option>
                           @endforeach
                       </select>

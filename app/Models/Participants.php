@@ -25,6 +25,8 @@ class Participants extends Model
         'id_indikator',
         'tahun_kepesertaan',
         'nama_ibu',
+        'created_at',
+        'updated_at',
         'created_by',
         'updated_by'
     ];
@@ -154,5 +156,77 @@ class Participants extends Model
         ->join('users', 'penerima_pkh.updated_by', '=', 'users.id')
         ->where('kelompok.id_akun_pembimbing', $id)
         ->get();
+    }
+
+    public function getPenerimaPkhByIdPembimbing2($id)
+    {
+        return DB::table('penerima_pkh')
+        ->select(
+            'anggota_kelompok.id',
+            'anggota_kelompok.id_kelompok',
+            'anggota_kelompok.id_penerima_pkh',
+            'anggota_kelompok.status',
+            'penerima_pkh.id',
+            'penerima_pkh.id_ktp',
+            'penerima_pkh.id_profil',
+            'penerima_pkh.id_home',
+            'penerima_pkh.id_kk',
+            'penerima_pkh.id_indikator',
+            'penerima_pkh.created_at',
+            'penerima_pkh.created_by',
+            'penerima_pkh.updated_at',
+            'penerima_pkh.updated_by',
+            'ktp.nama',
+            'ktp.nik',
+            'ktp.tempat_lahir',
+            'ktp.tgal_lahir',
+            'ktp.alamat',
+            'ktp.id_kelurahan',
+            'ktp.id_agama',
+            'ktp.status_perkawinan',
+            'ktp.pekerjaan',
+            'ktp.kewarganegaraan',
+            'users.name'
+            )
+        ->join('anggota_kelompok', 'penerima_pkh.id', '=', 'anggota_kelompok.id_penerima_pkh')
+        ->join('kelompok', 'anggota_kelompok.id_kelompok', '=', 'kelompok.id')
+        ->join('ktp', 'penerima_pkh.id_ktp', 'ktp.id')
+        ->join('users', 'penerima_pkh.updated_by', '=', 'users.id')
+        ->where('kelompok.id_akun_pembimbing', $id)
+        ->get();
+
+        // return DB::table('anggota_kelompok')
+        // ->select(
+        //     'anggota_kelompok.id',
+        //     'anggota_kelompok.id_kelompok',
+        //     'anggota_kelompok.id_penerima_pkh',
+        //     'anggota_kelompok.status',
+        //     'penerima_pkh.id',
+        //     'penerima_pkh.id_ktp',
+        //     'penerima_pkh.id_profil',
+        //     'penerima_pkh.id_home',
+        //     'penerima_pkh.id_kk',
+        //     'penerima_pkh.id_indikator',
+        //     'penerima_pkh.created_at',
+        //     'penerima_pkh.created_by',
+        //     'penerima_pkh.updated_at',
+        //     'penerima_pkh.updated_by',
+        //     'ktp.nama',
+        //     'ktp.nik',
+        //     'ktp.tempat_lahir',
+        //     'ktp.tgal_lahir',
+        //     'ktp.alamat',
+        //     'ktp.id_kelurahan',
+        //     'ktp.id_agama',
+        //     'ktp.status_perkawinan',
+        //     'ktp.pekerjaan',
+        //     'ktp.kewarganegaraan',
+        //     'users.name'
+        // )
+        // ->leftJoin('penerima_pkh', 'anggota_kelompok.id_penerima_pkh', 'penerima_pkh.id')
+        // ->leftJoin('ktp', 'penerima_pkh.id_ktp', '=', 'ktp.id')
+        // ->leftJoin('users', 'penerima_pkh.updated_by', '=', 'users.id')
+        // ->where('anggota_kelompok.id_kelompok', $id)
+        // ->get();
     }
 }

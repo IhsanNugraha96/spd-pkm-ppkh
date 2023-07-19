@@ -38,7 +38,7 @@ class DashboardController extends Controller
             $data_peserta_setiap_pembimbing[$i] = Participants::getPenerimaPkhByIdPembimbing($item->id);
             $i++;
         }
-// dd($data_peserta_setiap_pembimbing[0]);
+        
         return view('dashboard/index', compact('data_akun', 'data_penerima_pkh', 'data_kelompok', 'data_pembimbing', 'data_ketua', 'user', 'data_peserta_setiap_pembimbing'));
     }
 }

@@ -20,10 +20,10 @@ class KelompokController extends Controller
         $user = User::findById($user->id);
         if ($user->role_id == 3) {return back()->with(['error' => 'Anda tidak mempunyai akses!']);}
 
-        ($user->role_id == 1) ? $data = Kelompok::getAll() : $data = Kelompok::getByIdPembimbig($user->id);
-        ($user->role_id == 1) ? $data_akun = User::getAkunKetuaKelompok() : $data_akun = User::getAkunKetuaKelompokByIdPendamping($user->id);
+        ($user->role_id == 1) ? $data = Kelompok::getAll() : $data = Kelompok::getByIdPembimbig(Auth::user()->id);
+        ($user->role_id == 1) ? $data_akun = User::getAkunKetuaKelompok() : $data_akun = User::getAkunKetuaKelompokByIdPendamping(Auth::user()->id);
+        $data_akun_edit = User::getAkunKetuaKelompokByIdPendamping2(Auth::user()->id);
         
-
         if ($request->ajax()) {
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -48,7 +48,7 @@ class KelompokController extends Controller
                 ->make(true);
         }
         
-        return view('kelompok.index', compact('data', 'user', 'data_akun'));
+        return view('kelompok.index', compact('data', 'user', 'data_akun', 'data_akun_edit'));
     }
 
     public function insert(Request $request)
@@ -70,7 +70,7 @@ class KelompokController extends Controller
             'id'            => $id_kelompok,
             'nama_kelompok' => $request->name,
             'id_akun_user'  => $request->akun,
-            'id_akun_pembimbing'=> $user->id,
+            'id_akun_pembimbing'=> Auth::user()->id,
         ]);
 
         if($data){
@@ -105,7 +105,7 @@ class KelompokController extends Controller
     {
         $id = $request->id;
         $kelompok = Kelompok::find($id);
-        // dd($kelompok);
+        
         if ($kelompok == null) {
             return redirect()->route('kelompok')->with(['warning', 'Kelompok tidak ditemukan.']);
         }

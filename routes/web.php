@@ -36,16 +36,16 @@ Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name
 
 #USER
 Route::prefix('user')->group(function() {
-    Route::get('/', [UsersController::class, 'index'])->name('user.index')->middleware('auth');
-    Route::get('/get', [UsersController::class, 'get'])->name('user.get')->middleware('auth');    
-    Route::post('/add', [UsersController::class, 'add'])->name('user.add')->middleware('auth');
-    Route::put('/edit', [UsersController::class, 'edit'])->name('user.edit')->middleware('auth');
-    Route::delete('/delete', [UsersController::class, 'destroy'])->name('user.delete')->middleware('auth');
+    Route::get('/', [UsersController::class, 'index'])->name('user.index')->middleware('auth')->middleware('CheckAdminRole');
+    Route::get('/get', [UsersController::class, 'get'])->name('user.get')->middleware('auth')->middleware('CheckAdminRole');    
+    Route::post('/add', [UsersController::class, 'add'])->name('user.add')->middleware('auth')->middleware('CheckAdminRole');
+    Route::put('/edit', [UsersController::class, 'edit'])->name('user.edit')->middleware('auth')->middleware('CheckAdminRole');
+    Route::delete('/delete', [UsersController::class, 'destroy'])->name('user.delete')->middleware('auth')->middleware('CheckAdminRole');
     Route::get('/getById', [UsersController::class, 'getUserById'])->name('user.getById')->middleware('auth');
     Route::get('/getKetuaKelompok', [UsersController::class, 'getKetuaKelompok'])->name('user.getKetuaKelompok')->middleware('auth');
-    Route::get('/profil', [UsersController::class, 'profil'])->name('profil');
-    Route::put('/profil-edit', [UsersController::class, 'profilEdit'])->name('profil.edit');
-    Route::put('/profil-password', [UsersController::class, 'profilEditPassword'])->name('profil.edit-password');
+    Route::get('/profil', [UsersController::class, 'profil'])->name('profil')->middleware('auth');
+    Route::put('/profil-edit', [UsersController::class, 'profilEdit'])->name('profil.edit')->middleware('auth');
+    Route::put('/profil-password', [UsersController::class, 'profilEditPassword'])->name('profil.edit-password')->middleware('auth');
 });
 
 #DATAS

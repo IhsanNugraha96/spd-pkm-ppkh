@@ -165,7 +165,6 @@
                 id: data_id
             },
             success: function(response) {
-                console.log(response);
                 $('#name').val(response[0]['nama_kelompok']);
                 $("#akun_edit").val(response[0]['id_akun_user'])
             },

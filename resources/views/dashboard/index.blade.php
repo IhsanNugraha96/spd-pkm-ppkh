@@ -60,7 +60,11 @@
             </div>
             <div class="w_center w_55">
               <div class="progress">
-                <div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{ count($data_peserta_setiap_pembimbing[$i]) }}" aria-valuemin="0" aria-valuemax="{{ count($data_penerima_pkh) }}" style="width: {{ (count($data_peserta_setiap_pembimbing[$i])/count($data_penerima_pkh))*100 }}%;">
+                @if ( count($data_peserta_setiap_pembimbing[$i]) == 0 )
+                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{ count($data_peserta_setiap_pembimbing[$i]) }}" aria-valuemin="0" aria-valuemax="{{ count($data_penerima_pkh) }}" style="width: 0%;">
+                @else
+                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="{{ count($data_peserta_setiap_pembimbing[$i]) }}" aria-valuemin="0" aria-valuemax="{{ count($data_penerima_pkh) }}" style="width: {{ (count($data_peserta_setiap_pembimbing[$i])/count($data_penerima_pkh))*100 }}%;">
+                @endif                
                   <span class="sr-only">100% Complete</span>
                 </div>
               </div>
