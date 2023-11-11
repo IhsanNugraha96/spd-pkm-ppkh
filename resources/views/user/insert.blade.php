@@ -34,9 +34,15 @@
                 <div class="input-group">
                     <select class="form-control" id="validationCustomRolename" name="role" aria-describedby="inputGroupPrepend" required>
                         <option value="" selected disabled>--select role--</option>
-                        @foreach ($roles as $item)
-                            <option value="{{ $item['id'] }}">{{ $item['role_name'] }}</option>
-                        @endforeach
+                        @if (Auth::user()->role_id == 1)
+                          @foreach ($roles as $item)
+                            @if($item['id'] != 3)
+                              <option value="{{ $item['id'] }}">{{ $item['role_name'] }}</option>
+                            @endif
+                          @endforeach
+                        @elseif (Auth::user()->role_id == 2)
+                          <option value="3">Ketua Kelompok</option>
+                        @endif
                     </select>
 
                     <div class="invalid-feedback">

@@ -494,4 +494,10 @@
         });            
         return camelCaseWords.join(' ');
     }
+
+    $('#deleteParticipantModal').on('show.bs.modal', function (event) {
+        var button  = $(event.relatedTarget) // Button that triggered the modal
+        var data_id = button.data('id') // Extract info from data-* attributes
+        $('#id').val(data_id);
+    });
 </script>

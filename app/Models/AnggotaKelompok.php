@@ -70,4 +70,16 @@ class AnggotaKelompok extends Model
         ->get();
     }
 
+    public function getDataKelompokByIdPenerimaPkh($id)
+    {
+        return DB::table('anggota_kelompok')
+        ->select('kl.id', 'kl.nama_kelompok', 'kl.id_akun_user', 'kl.id_akun_pembimbing', 'u1.name', 'u2.name AS pembimbing')
+        ->leftJoin('kelompok AS kl', 'anggota_kelompok.id_kelompok', '=', 'kl.id')
+        ->leftJoin('users AS u1', 'kl.id_akun_user', '=', 'u1.id')
+        ->leftJoin('users AS u2', 'kl.id_akun_pembimbing', '=', 'u2.id')
+        ->where('anggota_kelompok.id_penerima_pkh', $id)
+        ->first();
+
+    }
+
 }

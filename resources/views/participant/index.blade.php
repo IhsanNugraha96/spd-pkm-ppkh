@@ -81,7 +81,7 @@
   </div>
   <!-- /page content -->
   @include('participant.edit')
-  {{-- @include('participant.delete') --}}
+  @include('participant.delete')
 @endsection
 {{-- page scripts --}}
 @push('scripts')

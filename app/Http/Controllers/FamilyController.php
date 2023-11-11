@@ -16,20 +16,19 @@ class FamilyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_kk'     => 'required',
-            'nik'       => 'required|Regex:/^\d+$/',
+            'nik'       => 'required|unique:ktp,id|regex:/^[0-9]+$/|digits:16',
             'nama'      => 'required',
             'kat'       => 'required',
             'hub'       => 'required',
             'jk'        => 'required',
             'tgl'       => 'required',
             'umur'      => 'required',
-            'kelas'     => 'required',
             'fasilitas' => 'required',
         ]);
 
         if ($validator->fails()) {
             //redirect dengan pesan error
-            return back()->with(['error' => 'Harap mengisi data dengan benar!']);
+            return back()->with(['error' => 'Data gagal disimpan, ada kesalahan validasi pada input Anda.']);
         }
 
         // Cari apakah data dengan 'nik' yang diberikan sudah ada dalam tabel 'anggota_keluarga'
@@ -70,7 +69,7 @@ class FamilyController extends Controller
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nik'       => 'required|Regex:/^\d+$/',
+            'nik'       => 'required|Regex:/^\d+$/|unique:ktp,id|regex:/^[0-9]+$/|digits:16',
             'nama'      => 'required',
             'kat'       => 'required',
             'hub'       => 'required',

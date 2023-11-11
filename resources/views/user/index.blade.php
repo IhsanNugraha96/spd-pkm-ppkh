@@ -51,8 +51,13 @@
               </p>
 
               <div class="container-fluid">    
-                <div class="text-right">      
-                  <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-user-plus"></i> | Add New User</button>
+                <div class="text-right">
+                      @if (Auth::user()->role_id == 1) 
+                        <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-user-plus"></i> | Add New User</button>
+                      @elseif (Auth::user()->role_id == 2) 
+                        <button type="button"  class="btn btn-sm btn-primary mb-2" data-toggle="modal" data-target="#addUserModal"><i class="fa fa-user-plus"></i> | Add New Leader Group</button>
+                      @endif   
+                  
                 </div>
                 <table class="table table-striped table-bordered" id="datatable" style="width:100%">
                   <thead>

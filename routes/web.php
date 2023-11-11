@@ -9,6 +9,8 @@ use App\Http\Controllers\IndikatorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PictureController;
 use App\Http\Controllers\KelompokController;
+use App\Http\Controllers\EksportController;
+use App\Http\Controllers\CropImageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,7 @@ Route::get('/register', 'App\Http\Controllers\RegisterController@index')->middle
 Route::post('/register', 'App\Http\Controllers\RegisterController@store')->name('register')->middleware('guest');
 
 //Routing login
-Route::get('/', 'App\Http\Controllers\AuthController@index')->middleware('guest');
+Route::get('/', 'App\Http\Controllers\AuthController@index');
 Route::get('/login', 'App\Http\Controllers\AuthController@index')->name('auth.login');
 Route::post('/authenticate', 'App\Http\Controllers\AuthController@authenticate')->name('authenticate')->middleware('guest');
 Route::get('/logout', 'App\Http\Controllers\AuthController@logout')->name('auth.logout')->middleware('auth');
@@ -59,6 +61,8 @@ Route::prefix('participants')->group(function() {
     Route::put('/update', [ParticipantsController::class, 'edit'])->name('participant.edit')->middleware('auth');
     Route::delete('/delete', [ParticipantsController::class, 'delete'])->name('participant.delete')->middleware('auth');
     Route::get('/getById', [ParticipantsController::class, 'getParticipantById'])->name('participant.getById')->middleware('auth');
+    Route::get('/eksport', [EksportController::class, 'index'])->name('eksport');
+    Route::get('/print', [EksportController::class, 'printData'])->name('print');
 });
 
 // Location
@@ -92,3 +96,7 @@ Route::prefix('kelompok')->group(function() {
     Route::delete('/delete',[KelompokController::class, 'delete'])->name('kelompok.delete')->middleware('auth');
     Route::get('/id', [KelompokController::class, 'getById'])->name('kelompok.getById')->middleware('auth');
 });
+
+
+Route::get('/crop-image-file', [CropImageController::class, 'index'])->name('crop_image.profile');
+Route::post('crop-image-upload-ajax', [CropImageController::class, 'cropImageUploadAjax']);

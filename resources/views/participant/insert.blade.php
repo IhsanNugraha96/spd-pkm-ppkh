@@ -66,9 +66,9 @@
       
                   <div class="form-row">
                     <div class="col">
-                      <label for="nik">NIK/No Peserta</label>
+                      <label for="nik">NIK/No Peserta<small style="color:red"> (Maks. 16 digit angka)</small></label>
                       <div class="input-group">
-                        <input type="text" class="form-control modalEditInput" id="nik" name="nik" placeholder="masukkan nik" aria-describedby="inputGroupPrepend" value="" required style="font-size: 0.875rem;">
+                        <input type="text" class="form-control modalEditInput" id="nik" name="nik" placeholder="masukkan nik" aria-describedby="inputGroupPrepend" value="" required style="font-size: 0.875rem;" maxlength="16">
                         <div class="invalid-feedback">
                           Harap masukkan NIK.
                         </div>
@@ -168,7 +168,7 @@
                     <div class="col">
                       <label for="rt">RT</label>
                       <div class="input-group">
-                        <input type="text" class="form-control modalEditInput" id="rt" name="rt" placeholder="rt" aria-describedby="inputGroupPrepend" value="" maxlength="3" required style="font-size: 0.875rem;">
+                        <input type="number" class="form-control modalEditInput" id="rt" name="rt" placeholder="rt" aria-describedby="inputGroupPrepend" value="" maxlength="3" required style="font-size: 0.875rem;">
                         <div class="invalid-feedback">
                           harap masukkan rt.
                         </div>
@@ -178,7 +178,7 @@
                     <div class="col">
                       <label for="rw">RW</label>
                       <div class="input-group">
-                        <input type="text" class="form-control modalEditInput" id="rw" name="rw" placeholder="rw" aria-describedby="inputGroupPrepend" value="" required style="font-size: 0.875rem;">
+                        <input type="number" class="form-control modalEditInput" id="rw" name="rw" placeholder="rw" aria-describedby="inputGroupPrepend" value="" required style="font-size: 0.875rem;">
                         <div class="invalid-feedback">
                           Harap masukkan rw.
                         </div>
@@ -230,7 +230,7 @@
                       </div>
                     </div>
                     
-                    <div class="col mb-3">
+                    {{-- <div class="col mb-3">
                       <label for="negara">Kewarganegaraan</label>
                       <div class="input-group">
                         <input type="text" class="form-control modalEditInput" id="negara" name="negara" placeholder="masukkan kewarganegaraan" aria-describedby="inputGroupPrepend" value="" required style="font-size: 0.875rem;">
@@ -238,16 +238,16 @@
                           Harap masukkan kewarganegaraan.
                         </div>
                       </div>
-                    </div>
+                    </div> --}}
                   </div>
       
                   <div class="text-danger font-weight-bold mt-2">KK</div><hr>
       
                   <div class="form-row">
                     <div class="col">
-                      <label for="kk">No Kartu Keluarga</label>
+                      <label for="kk">No Kartu Keluarga<small style="color:red"> (Maks. 16 digit angka)</small></label>
                       <div class="input-group">
-                        <input type="text" class="form-control modalEditInput" id="kk" name="kk" placeholder="masukkan no KK" aria-describedby="inputGroupPrepend" value="" required style="font-size: 0.875rem;">
+                        <input type="text" class="form-control modalEditInput" id="kk" name="kk" placeholder="masukkan no KK" aria-describedby="inputGroupPrepend" value="" required style="font-size: 0.875rem;" maxlength="16">
                         <div class="invalid-feedback">
                           Harap masukkan no KK.
                         </div>

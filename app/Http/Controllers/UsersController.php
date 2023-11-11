@@ -30,7 +30,11 @@ class UsersController extends Controller
     public function index(Request $request){
         $user = Auth::user();
         $user = User::findById($user->id);
-        $data = User::orderBy('role_id', 'ASC')->get();
+        if (Auth::user()->role_id == 1) {
+            $data = User::where('role_id', '!=', 3)->orderBy('role_id', 'ASC')->get();
+        } elseif (Auth::user()->role_id == 2) {
+            $data = User::where('role_id', 3)->orderBy('role_id', 'ASC')->get();
+        }
         $roles = Role::all();
         
         if ($request->ajax()) {

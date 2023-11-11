@@ -17,6 +17,7 @@ use App\Models\Indikator;
 use App\Models\Kelompok;
 use App\Models\AnggotaKelompok;
 use App\Models\User;
+use App\Models\Family;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -86,8 +87,11 @@ class ParticipantsController extends Controller
         $roles = Role::all();
         $data = $data[0];
         $data_keluarga = json_decode(Participants::getDatakeluargaByIdKk($data['id_kk']), true);
+        $id_participant = $request->query('id');
+        $data_kelompok = AnggotaKelompok::getDataKelompokByIdPenerimaPkh($id_participant);
+// dd($data_kelompok->nama_kelompok);
 
-        return view('participant.detail.index', compact('roles','data', 'user', 'data_keluarga'));
+        return view('participant.detail.index', compact('roles','data', 'user', 'data_keluarga', 'id_participant', 'data_kelompok'));
     }
 
     public function viewFormAdd()
@@ -119,12 +123,13 @@ class ParticipantsController extends Controller
         $id_anggota_kel = (new RandomCodeController)->generateRandomString(50, 'AGK');
 
         $validator = Validator::make($request->all(), [
-            'nik'      => 'required|unique:ktp,id',
+            'nik'      => 'required|unique:ktp,id|regex:/^[0-9]+$/|digits:16',
+            'kk'      => 'required|regex:/^[0-9]+$/|digits:16',
         ]);
 
         if ($validator->fails()) {
             //redirect dengan pesan error
-            return redirect()->route('participants')->with(['error' => 'NIK sudah ada!']);
+            return redirect()->route('participants')->with('error', 'Data gagal disimpan, ada kesalahan validasi pada input Anda.');
         }
         
         // instance model ktp
@@ -141,7 +146,7 @@ class ParticipantsController extends Controller
         $ktp->id_agama = $request->input('agama');
         $ktp->status_perkawinan = $request->input('kawin');
         $ktp->pekerjaan = $request->input('pekerjaan');
-        $ktp->kewarganegaraan = $request->input('negara');
+        $ktp->kewarganegaraan = "Indonesia";
         $ktp->created_by = Auth::user()->id;
 
         // instance model kk
@@ -153,16 +158,16 @@ class ParticipantsController extends Controller
         //instance model idikator
         $indikator = new Indikator();
         $indikator->id = $id_idikator;
-        $indikator->keluarga_sebelum    = 'keluarga_sebelum';
-        $indikator->keluarga_setelah    = 'keluarga_setelah';
-        $indikator->ekonomi_sebelum     = 'ekonomi_sebelum';
-        $indikator->ekonomi_setelah     = 'ekonomi_setelah';
-        $indikator->kesehatan_sebelum   = 'kesehatan_sebelum';
-        $indikator->kesehatan_setelah   = 'kesehatan_setelah';
-        $indikator->pendidikan_sebelum  = 'pendidikan_sebelum';
-        $indikator->pendidikan_setelah  = 'pendidikan_setelah';
-        $indikator->rumah_sebelum       = 'rumah_sebelum';
-        $indikator->rumah_setelah       = 'rumah_setelah';
+        $indikator->keluarga_sebelum    = '';
+        $indikator->keluarga_setelah    = '';
+        $indikator->ekonomi_sebelum     = '';
+        $indikator->ekonomi_setelah     = '';
+        $indikator->kesehatan_sebelum   = '';
+        $indikator->kesehatan_setelah   = '';
+        $indikator->pendidikan_sebelum  = '';
+        $indikator->pendidikan_setelah  = '';
+        $indikator->rumah_sebelum       = '';
+        $indikator->rumah_setelah       = '';
 
         // instance model peserta
         $peserta = new Participants();
@@ -287,5 +292,66 @@ class ParticipantsController extends Controller
         }else {
             abort(404);
         }
+    }
+
+    // public function delete(Request $request)
+    // {
+    //     $id = $request->id;
+    //     $data_participant = Participants::find($id);
+    //     // dd($data_participant['id_kk']);
+        
+    //     if ($data_participant == null) {
+    //         return redirect()->route('participants')->with(['warning', 'Peserta tidak ditemukan.']);
+    //     }
+    //     else {
+    //         $id_kk = $data_participant['id_kk'];
+    //         $id_ktp = $data_participant['id_ktp'];
+    //         $id_indikator = $data_participant['id_indikator'];
+    //         $id_profil = $data_participant['id_profil'];
+    //         $id_home = $data_participant['id_home'];
+
+    //         DB::table('anggota_keluarga')->where('id_kk', $id_kk)->delete();
+    //         DB::table('kk')->where('id', $id_kk)->delete();
+    //         DB::table('ktp')->where('id', $id_ktp)->delete();
+    //         DB::table('indikator')->where('id', $id_indikator)->delete();
+    //         DB::table('profil_images')->where('id', $id_profil)->delete();
+    //         DB::table('home_images')->where('id', $id_home)->delete();
+
+    //         $data_participant->delete();
+    //         return redirect()->route('participants')->with(['success' => 'Data Peserta berhasil dihapus!']);
+    //     }        
+    // }
+
+    public function delete(Request $request)
+    {
+        $id = $request->id;
+        $data_participant = Participants::find($id);
+        
+        if ($data_participant == null) {
+            return redirect()->route('participants')->with(['warning', 'Peserta tidak ditemukan.']);
+        }
+        else {
+            $id_kk = $data_participant['id_kk'];
+            $id_ktp = $data_participant['id_ktp'];
+            $id_indikator = $data_participant['id_indikator'];
+            $id_profil = $data_participant['id_profil'];
+            $id_home = $data_participant['id_home'];
+
+            DB::table('anggota_keluarga')->where('id_kk', $id_kk)->delete();
+            DB::table('kk')->where('id', $id_kk)->delete();
+            DB::table('ktp')->where('id', $id_ktp)->delete();
+            DB::table('indikator')->where('id', $id_indikator)->delete();
+            DB::table('anggota_kelompok')->where('id_penerima_pkh', $id)->delete();
+
+            if ($data_participant['id_profil'] != "1") {
+                DB::table('profil_images')->where('id', $id_profil)->delete();
+            }
+            if ($data_participant['id_home'] != "1") { 
+                DB::table('home_images')->where('id', $id_home)->delete();
+            }
+
+            $data_participant->delete();
+            return redirect()->route('participants')->with(['success' => 'Data Peserta berhasil dihapus!']);
+        }        
     }
 }

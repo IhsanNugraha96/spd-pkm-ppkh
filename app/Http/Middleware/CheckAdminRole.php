@@ -23,7 +23,7 @@ class CheckAdminRole
         }
 
         // Cek apakah user mempunyai role admin dengan role_id = 1
-        if (Auth::user()->role_id != 1) {
+        if (Auth::user()->role_id == 3) {
             abort(403, 'Unauthorized action.');
         }
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ProfilImages;
 use App\Models\Participants;
 use App\Models\Home;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +65,19 @@ class PictureController extends Controller
         }
 
         if ($request->hasFile('image')) {
+            // $folderPath = public_path('public/images/peserta/');
+
+            // $image_parts = explode(";base64,", $request->image);
+            // $image_type_aux = explode("image/", $image_parts[0]);
+            // $image_type = $image_type_aux[1];
+            // $image_base64 = base64_decode($image_parts[1]);
+    
+            // $imageName = $request->id_participant.'-'.$file->getClientOriginalName() . '.png';
+
+            // $imageFullPath = $folderPath.$imageName;
+    
+            // file_put_contents($imageFullPath, $image_base64);
+
             $imagePath = $request->file('image')->storeAs('public/images/peserta', $request->id_participant.'-'.$file->getClientOriginalName());
         }
 
@@ -71,6 +85,7 @@ class PictureController extends Controller
             $profil = new ProfilImages();
             $profil->id = $id_profil;
             $profil->profil_image = $request->id_participant.'-'.$file->getClientOriginalName();
+            // $profil->profil_image = $imageName;
             $profil->created_by = Auth::user()->id;
             $profil->updated_by = Auth::user()->id;
 
@@ -85,6 +100,7 @@ class PictureController extends Controller
             unlink("storage/images/peserta/".$profil->profil_image);
 
             $profil->profil_image = $request->id_participant.'-'.$file->getClientOriginalName();
+            // $profil->profil_image = $imageName;
             $profil->updated_by = Auth::user()->id;
 
             $profil->save();
